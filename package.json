@@ -1,0 +1,27 @@
+{
+  "name": "required-keys",
+  "version": "0.0.1",
+  "description": "make sure the desired key value pairs exist in a given object",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nisaacson/required-keys.git"
+  },
+  "keywords": [
+    "required",
+    "keys",
+    "object",
+    "hash"
+  ],
+  "author": {
+    "name": "Noah Isaacson"
+  },
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "readme": "make sure the desired key value pairs exist in a given object\n",
+  "_id": "required-keys@0.0.0",
+  "_from": "required-keys@"
+}

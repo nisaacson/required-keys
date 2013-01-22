@@ -49,5 +49,33 @@ function nonNull(data, fields, cb) {
 }
 
 
+function truthy(data, fields, cb) {
+  var message;
+  for (var i in fields) {
+    var key = fields[i];
+    if (!data.hasOwnProperty(key)) {
+      message = 'key does not exist in data: ' + key.toString();
+      if (cb) {
+        return cb(message, false);
+      }
+      return false;
+    }
+    if(!data[key]) {
+      message = 'value for key is falsy: ' + key.toString();
+      if (cb) {
+        return cb(message, false);
+      }
+      return false;
+    }
+  }
+  if (cb) {
+    return cb(null, true);
+  }
+  return true;
+}
+
+
 exports.nonNull = nonNull;
 exports.keysOnly = keysOnly;
+
+exports.truthy = truthy;
