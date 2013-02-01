@@ -95,7 +95,7 @@ function truthySync(data, fields) {
       };
       errors.push(err);
     }
-    else if (!data.key) {
+    else if (!data[key]) {
       err = {
         message: 'value is falsy',
         key: key,
