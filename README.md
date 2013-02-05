@@ -19,8 +19,32 @@ rk.truthy(data, keys, function(err) {
 
 
 **rk.nonNull**
-**rk.keysOnly**
+```javascript
+var rk = require('required-keys');
 
+var data = {
+  foo: false,
+  bar: 'test'
+}
+var keys = ['foo', 'bar'];
+rk.nonNull(data, keys, function(err) {
+  console.log('error should be null:', err);
+});
+```
+
+**rk.keysOnly**
+```javascript
+var rk = require('required-keys');
+
+var data = {
+  foo: null,
+  bar: undefined
+}
+var keys = ['foo', 'bar'];
+rk.keysOnly(data, keys, function(err) {
+  console.log('error should be null:', err);
+});
+```
 
 
 ### Sync
