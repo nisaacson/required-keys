@@ -1,6 +1,6 @@
 {
   "name": "required-keys",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "make sure the desired key value pairs exist in a given object",
   "main": "index.js",
   "directories": {

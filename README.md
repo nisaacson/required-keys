@@ -27,6 +27,7 @@ rk.truthy(data, keys, function(err) {
 Return null if all checks pass or an array of errors
 **rk.truthySync**
 **rk.nonNullSync**
+**rk.keysOnlySync**
 
 
 ## Installation
