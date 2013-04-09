@@ -1,4 +1,8 @@
-make sure the desired key value pairs exist in a given object
+# Required-Keys
+Make sure the desired key value pairs exist in a given object
+
+# Installation
+`npm install -S required-keys`
 
 # Usage
 
@@ -21,7 +25,6 @@ rk.truthy(data, keys, function(err) {
 **rk.nonNull**
 ```javascript
 var rk = require('required-keys');
-
 var data = {
   foo: false,
   bar: 'test'
@@ -35,7 +38,6 @@ rk.nonNull(data, keys, function(err) {
 **rk.keysOnly**
 ```javascript
 var rk = require('required-keys');
-
 var data = {
   foo: null,
   bar: undefined
@@ -48,11 +50,47 @@ rk.keysOnly(data, keys, function(err) {
 
 
 ### Sync
-Return null if all checks pass or an array of errors
+All sync methods return null if all checks pass or an array of errors
+
 **rk.truthySync**
+
+```javascript
+var keys = ['dog', 'cat', 'lemon']
+var data = {
+  dog: 'dog',
+  cat: 'cat',
+  lemon: true,
+  apple: ''
+}
+// err is either null if all keys map to truthy values or an array of errors
+var err = rk.truthySync(data, keys)
+```
+
 **rk.nonNullSync**
+
+```javascript
+var keys = ['dog', 'cat', 'lemon']
+var data = {
+  dog: 'dog',
+  cat: 'cat',
+  lemon: false
+}
+// err is either null if all keys map to truthy values or an array of errors
+var err = rk.nonNullSync(data, keys)
+should.not.exist(err);
+```
+
 **rk.keysOnlySync**
 
+```javascript
+var keys = ['dog', 'cat', 'lemon']
+var data = {
+  dog: null,
+  cat: undefined,
+  fruit: 'banana'
+}
+// err is either null if all keys map to truthy values or an array of errors
+var err = rk.keysOnlySync(data, keys)
+```
 
-## Installation
-`npm install -S required-keys`
+

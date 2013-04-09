@@ -1,78 +1,87 @@
-function keysOnly(data, fields, callback) {
-  for (var i in fields) {
-    var key = fields[i];
-    if (!data.hasOwnProperty(key) || data[key] === undefined) {
-      var message = 'missing key: ' + key.toString();
-      if (callback) {
-        return callback(message, false);
-      }
-      return false;
-    }
-  }
-  if (callback) {
-    return callback(null, true);
-  }
-  return true;
-}
-
-
-function nonNull(data, fields, cb) {
-  var message;
-  for (var i in fields) {
-    var key = fields[i];
-    if (!data.hasOwnProperty(key)) {
-      message = 'key does not exist in data: ' + key.toString();
-      if (cb) {
-        return cb(message, false);
-      }
-      return false;
-    }
-    if(data[key] === null) {
-      message = 'value for key is null: ' + key.toString();
-      if (cb) {
-        return cb(message, false);
-      }
-      return false;
-    }
-    if(data[key] === undefined) {
-      message = 'value for key is undefined: ' + key.toString();
-      if (cb) {
-        return cb(message, false);
-      }
-      return false;
-    }
-  }
-  if (cb) {
-    return cb(null, true);
-  }
-  return true;
-}
-
-
+/**
+ * @param {Object} data,
+ * @param {Array} fields
+ * @return null if all required keys exist and map to truthy values
+ * @return {Array} An array containing errors about all keys that failed
+ */
 function truthy(data, fields, cb) {
-  var message;
-  for (var i in fields) {
-    var key = fields[i];
-    if (!data.hasOwnProperty(key)) {
-      message = 'key does not exist in data: ' + key.toString();
-      if (cb) {
-        return cb(message, false);
-      }
-      return false;
-    }
-    if(!data[key]) {
-      message = 'value for key is falsy: ' + key.toString();
-      if (cb) {
-        return cb(message, false);
-      }
-      return false;
+  var errors = [];
+  var err;
+  var i
+  for(i = 0; i < fields.length; i++ ) {
+    var key = fields[i]
+    if (!data[key]) {
+      err = {
+        message: 'key not truthy data',
+        key: key,
+        value: data[key]
+      };
+      errors.push(err);
     }
   }
-  if (cb) {
-    return cb(null, true);
+  if (errors.length === 0) {
+    return cb()
   }
-  return true;
+  cb(errors)
 }
+
+/**
+ * @param {Object} data,
+ * @param {Array} fields
+ * @return null if all required keys exist and map to non-null values
+ * @return {Array} An array containing errors about all keys that failed
+ */
+function nonNull(data, fields, cb) {
+  var errors = [];
+  var err;
+  var i
+  for(i = 0; i < fields.length; i++ ) {
+    var key = fields[i]
+    var value = data[key]
+    if (!data.hasOwnProperty(key) || value === null || value === undefined) {
+      err = {
+        message: 'key not set in data',
+        key: key,
+        value: data[key]
+      };
+      errors.push(err);
+    }
+  }
+  if (errors.length === 0) {
+    return cb()
+  }
+  return cb(errors);
+}
+
+
+/**
+ * @param {Object} data,
+ * @param {Array} fields
+ * @return null if all required keys exist and map to non-null values
+ * @return {Array} An array containing errors about all keys that failed
+ */
+function keysOnly(data, fields, cb) {
+  var errors = [];
+  var err;
+  var i
+  for(i = 0; i < fields.length; i++ ) {
+    var key = fields[i]
+    var value = data[key]
+    if (!data.hasOwnProperty(key)) {
+      err = {
+        message: 'key not set in data',
+        key: key,
+        value: data[key]
+      };
+      errors.push(err);
+    }
+  }
+  if (errors.length === 0) {
+    return cb()
+  }
+  cb(errors)
+}
+
 
 
 /**
@@ -82,22 +91,14 @@ function truthy(data, fields, cb) {
  * @return {Array} An array containing errors about all keys that failed
  */
 function truthySync(data, fields) {
-  var keys = Object.keys(data);
   var errors = [];
   var err;
-  for (var i in fields) {
-    var key = fields[i];
-    if (!data.hasOwnProperty(key)) {
+  var i
+  for(i = 0; i < fields.length; i++ ) {
+    var key = fields[i]
+    if (!data[key]) {
       err = {
-        message: 'key not set in data',
-        key: key,
-        value: undefined
-      };
-      errors.push(err);
-    }
-    else if (!data[key]) {
-      err = {
-        message: 'value is falsy',
+        message: 'key not truthy data',
         key: key,
         value: data[key]
       };
@@ -110,30 +111,22 @@ function truthySync(data, fields) {
   return errors;
 }
 
-
 /**
  * @param {Object} data,
  * @param {Array} fields
- * @return null if all required keys exist and map to truthy values
+ * @return null if all required keys exist and map to non-null values
  * @return {Array} An array containing errors about all keys that failed
  */
 function nonNullSync(data, fields) {
-  var keys = Object.keys(data);
   var errors = [];
   var err;
-  for (var i in fields) {
-    var key = fields[i];
-    if (!data.hasOwnProperty(key)) {
+  var i
+  for(i = 0; i < fields.length; i++ ) {
+    var key = fields[i]
+    var value = data[key]
+    if (!data.hasOwnProperty(key) || value === null || value === undefined) {
       err = {
         message: 'key not set in data',
-        key: key,
-        value: undefined
-      };
-      errors.push(err);
-    }
-    else if (data[key] === undefined || data[key] === null) {
-      err = {
-        message: 'value is null',
         key: key,
         value: data[key]
       };
@@ -146,36 +139,43 @@ function nonNullSync(data, fields) {
   return errors;
 }
 
+
 /**
  * @param {Object} data,
  * @param {Array} fields
- * @return null if all required keys exist and map to truthy values
+ * @return null if all required keys exist and map to non-null values
  * @return {Array} An array containing errors about all keys that failed
  */
 function keysOnlySync(data, fields) {
-  var keys = Object.keys(data);
   var errors = [];
   var err;
-  for (var i in fields) {
-    var key = fields[i];
+  var i
+  for(i = 0; i < fields.length; i++ ) {
+    var key = fields[i]
+    var value = data[key]
     if (!data.hasOwnProperty(key)) {
       err = {
         message: 'key not set in data',
         key: key,
-        value: undefined
+        value: data[key]
       };
       errors.push(err);
     }
-
   }
   if (errors.length === 0) {
     return null;
   }
   return errors;
 }
-exports.nonNull = nonNull;
-exports.keysOnly = keysOnly;
-exports.truthy = truthy;
-exports.truthySync = truthySync;
-exports.nonNullSync = nonNullSync;
-exports.keysOnlySync = keysOnlySync;
+
+module.exports = {
+  // async
+  truthy: truthy,
+  nonNull: nonNull,
+  keysOnly: keysOnly,
+
+  // sync
+  truthySync: truthySync,
+  nonNullSync: nonNullSync,
+  keysOnlySync: keysOnlySync
+}
